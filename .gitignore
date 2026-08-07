@@ -1,0 +1,32 @@
+### macOS
+# Finder metadata
+.DS_Store
+
+# Thumbnails
+._*
+
+# Custom folder icons
+Icon
+
+
+# Volume root files
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+### Rime generated
+# Build output (regenerated on deploy)
+build/
+
+# Grammar files (regenerated on deploy)
+*.gram
+
+# User lexicon databases (learning data; sync via Rime built-in sync)
+*.userdb/
+
+# Rime built-in sync backup
+sync/

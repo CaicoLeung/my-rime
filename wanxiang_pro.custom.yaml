@@ -1,0 +1,2 @@
+patch:
+  switches/@3/reset: 1  # 启用万象原生 emoji 开关(表情开),数据 lua/data/emoji.txt
