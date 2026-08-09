@@ -1,2 +1,4 @@
 patch:
   switches/@3/reset: 1  # 启用万象原生 emoji 开关(表情开),数据 lua/data/emoji.txt
+  switches/@6/reset: 1  # 默认开启小字集（通规8105字），避免大量生僻字显示为方框
+  charset/0/addlist/0: "诶濛硷氽尛躝〇冇吔磺咗囧屌鲶芶咲畲垅𰻝𰻞龍朙頔雲啱"  # 在原有白名单基础上追加啱
