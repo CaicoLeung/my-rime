@@ -12,13 +12,13 @@ patch:
     color_scheme_dark: wechat_dark
     candidate_list_layout: linear                   # linear 横排 | stacked 堆叠
     text_orientation: horizontal                    # horizontal | vertical
-    candidate_format: "%c %@ "                      # 编号 %c 与候选 %@ 间距
+    candidate_format: "%c %@"                       # 编号 %c 与候选 %@ 间距
     corner_radius: 6                                # 窗口圆角
     hilited_corner_radius: 5                        # 高亮圆角
-    line_spacing: 10                                # 行间距
+    line_spacing: 4                                 # 行间距
     border_height: 1                                # 窗口上下高度
     border_width: 1                                 # 窗口左右宽度
-    font_face: "PingFangSC"                         # 候选词字体
+    font_face: "PingFangSC, MiSans L3"               # 候选词字体（MiSans L3 回退覆盖生僻字/CJK扩展区）
     font_point: 16                                  # 候选字大小
     label_font_point: 13                            # 编号大小
 
