@@ -5,6 +5,8 @@
 #   否则系统会先拦截 Caps Lock，Rime 收不到事件。
 
 patch:
+  schema_list:
+    - schema: wanxiang_pro
   ascii_composer/good_old_caps_lock: false      # false=中英切换, true=传统大写
   ascii_composer/switch_key/Caps_Lock: commit_code   # 上屏原始编码后切英文
   ascii_composer/switch_key/Shift_L: noop      # 禁用左 Shift 切换
