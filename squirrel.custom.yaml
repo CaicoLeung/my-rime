@@ -1,0 +1,134 @@
+# Squirrel custom skin — macOS scheme (lonr) + Catppuccin (4 variants)
+# Sources:
+#   https://github.com/lonr/rime-squirrel-macos-color-scheme
+#   https://github.com/catppuccin/squirrel
+# Color format: 0xAABBGGRR (opaque => 0xBBGGRR)
+
+patch:
+  style:
+    inline_preedit: true                            # 编码行内嵌
+    # 当前生效：微信输入法（亮=wechat_light / 暗=wechat_dark）。改下面两行可切回 mac/mac_dark 或 catppuccin_*
+    color_scheme: wechat_light
+    color_scheme_dark: wechat_dark
+    candidate_list_layout: linear                   # linear 横排 | stacked 堆叠
+    text_orientation: horizontal                    # horizontal | vertical
+    candidate_format: "%c %@"                       # 编号 %c 与候选 %@ 间距
+    corner_radius: 6                                # 窗口圆角
+    hilited_corner_radius: 5                        # 高亮圆角
+    line_spacing: 4                                 # 行间距
+    border_height: 1                                # 窗口上下高度
+    border_width: 1                                 # 窗口左右宽度
+    font_face: "PingFangSC, MiSans L3"               # 候选词字体（MiSans L3 回退覆盖生僻字/CJK扩展区）
+    font_point: 16                                  # 候选字大小
+    label_font_point: 13                            # 编号大小
+
+  preset_color_schemes:
+    # ============== macOS 原生风 (lonr) ==============
+    mac:
+      name: macOS Light
+      author: "lonr <https://lonr.eu.org>"
+      back_color: 0xf1f2f2                          # 背景
+      label_color: 0x808080                         # 编号
+      candidate_text_color: 0x494949                # 候选
+      comment_text_color: 0x494949                  # 注释
+      hilited_candidate_back_color: 0xd85a00        # 选中背景
+      hilited_candidate_label_color: 0xffffff       # 选中编号
+      hilited_candidate_text_color: 0xffffff        # 选中文字
+      hilited_comment_text_color: 0xffffff          # 选中注释
+    mac_dark:
+      name: macOS Dark
+      author: "lonr <https://lonr.eu.org>"
+      back_color: 0x393939
+      label_color: 0x7b7b7b
+      candidate_text_color: 0xebebeb
+      comment_text_color: 0xebebeb
+      hilited_candidate_back_color: 0xd15900
+      hilited_candidate_label_color: 0xffffff
+      hilited_candidate_text_color: 0xffffff
+      hilited_comment_text_color: 0xffffff
+
+    # ============== 微信输入法风（亮/暗）==============
+    wechat_light:
+      name: "微信浅色／WeChat Light"
+      back_color: 0xFFFFFF                          # 背景 白
+      candidate_back_color: 0xFFFFFF
+      hilited_candidate_back_color: 0x60C107        # 选中背景 微信绿 #07C160
+      hilited_back_color: 0x60C107
+      candidate_text_color: 0x262626                # 候选文字 深灰
+      hilited_candidate_text_color: 0xFFFFFF        # 选中文字 白
+      label_color: 0x999999                         # 编号 灰
+      hilited_candidate_label_color: 0xFFFFFF
+      comment_text_color: 0x999999                  # 注释
+      hilited_comment_text_color: 0xFFFFFF
+      text_color: 0x595959                          # 拼音（inline_preedit:false）
+      hilited_text_color: 0x999999
+      border_color: 0xFFFFFF
+    wechat_dark:
+      name: "微信深色／WeChat Dark"
+      back_color: 0x1F1F1F                          # 背景 深灰
+      candidate_back_color: 0x1F1F1F
+      hilited_candidate_back_color: 0x60C107        # 选中背景 微信绿
+      hilited_back_color: 0x60C107
+      candidate_text_color: 0xD4D4D4                # 候选文字 浅灰
+      hilited_candidate_text_color: 0xFFFFFF
+      label_color: 0x808080
+      hilited_candidate_label_color: 0xFFFFFF
+      comment_text_color: 0x808080
+      hilited_comment_text_color: 0xFFFFFF
+      text_color: 0xA6A6A6
+      hilited_text_color: 0x808080
+      border_color: 0x2D2D2D
+
+    # ============== Catppuccin ==============
+    catppuccin_latte:
+      name: Catppuccin Latte
+      back_color: 0xE8E0DC                          # Crust
+      border_color: 0xEFE9E6                        # Mantle
+      text_color: 0x775F5C                          # Subtext1
+      label_color: 0x856F6C                         # Subtext0
+      candidate_text_color: 0x694F4C                # Text
+      hilited_back_color: 0x2BA040                  # Green #40A02B
+      hilited_candidate_text_color: 0xF5F1EF        # Base
+      hilited_candidate_label_color: 0xDAD0CC       # Surface0
+      hilited_text_color: 0xBEB0AC                  # Surface2
+      hilited_comment_text_color: 0xDAD0CC          # Surface0
+      comment_text_color: 0xBEB0AC                  # Surface2
+    catppuccin_mocha:
+      name: Catppuccin Mocha
+      back_color: 0x1B1111                          # Crust
+      border_color: 0x251818                        # Mantle
+      text_color: 0xDEC2BA                          # Subtext1
+      label_color: 0xC8ADA6                         # Subtext0
+      candidate_text_color: 0xF4D6CD                # Text
+      hilited_back_color: 0xA1E3A6                  # Green #a6e3a1
+      hilited_candidate_text_color: 0x2E1E1E        # Base
+      hilited_candidate_label_color: 0x443231       # Surface0
+      hilited_text_color: 0x705B58                  # Surface2
+      hilited_comment_text_color: 0x443231          # Surface0
+      comment_text_color: 0x705B58                  # Surface2
+    catppuccin_frappe:
+      name: Catppuccin Frappe
+      back_color: 0x342623                          # Crust
+      border_color: 0x3C2C29                        # Mantle
+      text_color: 0xE2BFB5                          # Subtext1
+      label_color: 0xCEADA5                         # Subtext0
+      candidate_text_color: 0xF5D0C6                # Text
+      hilited_back_color: 0x89D1A6                  # Green #a6d189
+      hilited_candidate_text_color: 0x463430        # Base
+      hilited_candidate_label_color: 0x594541       # Surface0
+      hilited_text_color: 0x806862                  # Surface2
+      hilited_comment_text_color: 0x594541          # Surface0
+      comment_text_color: 0x806862                  # Surface2
+    catppuccin_macchiato:
+      name: Catppuccin Macchiato
+      back_color: 0x261918                          # Crust
+      border_color: 0x30201E                        # Mantle
+      text_color: 0xE0C0B8                          # Subtext1
+      label_color: 0xCBADA5                         # Subtext0
+      candidate_text_color: 0xF5D3CA                # Text
+      hilited_back_color: 0x95DAA6                  # Green #a6da95
+      hilited_candidate_text_color: 0x3A2724        # Base
+      hilited_candidate_label_color: 0x4F3A36       # Surface0
+      hilited_text_color: 0x70B558                  # Surface2
+      hilited_comment_text_color: 0x4F3A36          # Surface2
+      comment_text_color: 0x70B558                  # Surface0

@@ -1,0 +1,5 @@
+patch:
+  switches/@3/reset: 1  # 启用万象原生 emoji 开关(表情开),数据 lua/data/emoji.txt
+  switches/@6/reset: 0  # 默认开启大字集，显示全部汉字（含粤方言字等），如需小字集可Ctrl+G切换
+  switches/@7/reset: 1  # 默认开启超级提示（候选栏提示区显示符号/表情/翻译等对应关系数据）
+  # charset addlist 白名单在 reset:0(大字集默认)下不需要；若日后切回小字集可手动编辑 schema 的 charset/0/addlist
