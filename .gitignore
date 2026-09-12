@@ -9,4 +9,4 @@ sync/
 installation.yaml
 user.yaml
 *.custom.yaml
-.DS_Store
+.DS_Storedicts/*.pro.dict.yaml
