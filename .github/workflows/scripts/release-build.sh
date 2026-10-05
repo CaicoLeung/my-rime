@@ -1,11 +1,23 @@
 #!/bin/bash
 # 打包对应方案到 zip 文件，放到 dist 目录
-set -e
+set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/../../../" && pwd)"
 DIST_DIR="$ROOT_DIR/dist"
 CUSTOM_DIR="$ROOT_DIR/custom"
 PURE_FUZHU="zrm"  # Pure 默认使用哪套 Pro 辅助码词库；只影响打包时默认词库
+
+ZIP_LEVEL="${ZIP_LEVEL:-9}"
+if command -v nproc >/dev/null 2>&1; then
+  DEFAULT_ZIP_JOBS="$(nproc)"
+else
+  DEFAULT_ZIP_JOBS=2
+fi
+(( DEFAULT_ZIP_JOBS > 4 )) && DEFAULT_ZIP_JOBS=4
+ZIP_JOBS="${ZIP_JOBS:-$DEFAULT_ZIP_JOBS}"
+
+SCHEMA_LIST=("wx" "base" "lite" "pure" "flypy" "hanxin" "moqi" "tiger" "wubi" "zrm" "shouyou" "shyplus")
+REQUESTED_SCHEMA="${1:-${SCHEMA_NAME:-}}"
 
 EXCLUDE_DICT_FILES=(
   "xxx.dict.yaml"
@@ -15,11 +27,79 @@ EXCLUDE_DICT_FILES=(
   # "renming.pro.dict.yaml"
 )
 
-# 生成 PRO 分包文件
-echo "▶️ PRO 分包开始"
-python3 "$ROOT_DIR/.github/workflows/scripts/aux_go.py"
-echo "✅ PRO 分包完毕"
-echo
+if [[ ! "$ZIP_LEVEL" =~ ^[0-9]$ ]]; then
+  echo "ZIP_LEVEL 必须是 0-9，当前: $ZIP_LEVEL" >&2
+  exit 1
+fi
+if [[ ! "$ZIP_JOBS" =~ ^[1-9][0-9]*$ ]]; then
+  echo "ZIP_JOBS 必须是正整数，当前: $ZIP_JOBS" >&2
+  exit 1
+fi
+
+if [[ -n "$REQUESTED_SCHEMA" && ! " ${SCHEMA_LIST[*]} " =~ " ${REQUESTED_SCHEMA} " ]]; then
+  echo "参数错误: 只支持 ${SCHEMA_LIST[*]}" >&2
+  exit 1
+fi
+
+prepare_pro_dicts() {
+  if [[ -z "$REQUESTED_SCHEMA" ]]; then
+    echo "▶️ PRO 分包开始（全部辅助码）"
+    python3 "$ROOT_DIR/.github/workflows/scripts/aux_go.py"
+  elif [[ "$REQUESTED_SCHEMA" == "base" || "$REQUESTED_SCHEMA" == "lite" ]]; then
+    echo "⏩ $REQUESTED_SCHEMA 不需要 Pro 词库，跳过 aux_go.py"
+    return
+  elif [[ "$REQUESTED_SCHEMA" == "pure" ]]; then
+    echo "▶️ PRO 分包开始（Pure 只生成 $PURE_FUZHU）"
+    python3 "$ROOT_DIR/.github/workflows/scripts/aux_go.py" \
+      --schemes "$PURE_FUZHU" --no-chaifen
+  else
+    echo "▶️ PRO 分包开始（只生成 $REQUESTED_SCHEMA）"
+    python3 "$ROOT_DIR/.github/workflows/scripts/aux_go.py" \
+      --schemes "$REQUESTED_SCHEMA"
+  fi
+  echo "✅ PRO 分包完毕"
+  echo
+}
+
+build_opencc_wanxiang() {
+  OPENCC_DIR="$ROOT_DIR/opencc/wanxiang"
+
+  if [[ ! -d "$OPENCC_DIR" ]]; then
+    return
+  fi
+
+  if ! command -v opencc_dict >/dev/null 2>&1; then
+    sudo apt-get update
+    sudo apt-get install -y opencc
+  fi
+
+  cd "$OPENCC_DIR"
+
+  for f in *.txt; do
+    [[ -f "$f" ]] || continue
+
+    # 保留自定义文件，不转换不删除
+    case "$f" in
+      Custom_STPhrases.txt|Custom_Emoji.txt)
+        continue
+        ;;
+    esac
+
+    echo "build opencc: $f"
+
+    sed -i '/^#/d' "$f"
+
+    opencc_dict \
+      -i "$f" \
+      -o "${f%.txt}.ocd2" \
+      -f text \
+      -t ocd2
+
+    rm -f "$f"
+  done
+
+  cd "$ROOT_DIR"
+}
 
 package_schema_base() {
   OUT_DIR=$1
@@ -47,6 +127,7 @@ package_schema_base() {
     --exclude='/dist/' \
     --exclude='/docs/' \
     --exclude='/mkdocs.yml' \
+    --exclude='custom_phrase.txt' \
     --exclude='/release-please-config.json' \
     --exclude='/pro-*-fuzhu-dicts' \
     --exclude='/CHANGELOG.md' \
@@ -56,8 +137,7 @@ package_schema_base() {
     --exclude="/$OUT_BASE" \
     "$ROOT_DIR/" "$OUT_DIR/"
 
-  # 2.1) Base 内的 T9/T9i 强制挂载 Base 主词库。
-  #      只识别 translator: 块中的 dictionary 键，不依赖行尾注释内容。
+  # 2.1) Base 和 Lite 都携带 T9/T9i。
   python3 - \
     "$OUT_DIR/wanxiang_t9.schema.yaml" \
     "$OUT_DIR/wanxiang_t9i.schema.yaml" <<'PY'
@@ -166,6 +246,7 @@ package_schema_lite() {
     --exclude='.yamlfmt' \
     --exclude='/custom' \
     --exclude='/LICENSE' \
+    --exclude='custom_phrase.txt' \
     --exclude='/wanxiang.dict.yaml' \
     --exclude='/wanxiang.schema.yaml' \
     --exclude='/wanxiang_lite.dict.yaml' \
@@ -173,7 +254,8 @@ package_schema_lite() {
     --exclude="/$OUT_BASE" \
     "$ROOT_DIR/" "$OUT_DIR/"
 
-  # 3.1) Lite 内的 T9/T9i：三态开关组裁成两态布尔开关
+  # 3.1) Lite 同样保留 T9/T9i，并继续使用 wanxiang_lite 词库；
+  #     这里只裁剪 T9/T9i 的开关组，不改 dictionary。
   python3 - \
     "$OUT_DIR/wanxiang_t9.schema.yaml" \
     "$OUT_DIR/wanxiang_t9i.schema.yaml" <<'PY'
@@ -261,6 +343,62 @@ tone_map = str.maketrans({
 def strip_tone(text):
     return text.replace("m̀", "me").translate(tone_map)
 
+
+def dedup_zi_dict(path):
+    if not path.is_file():
+        return
+
+    if path.name != "zi.lite.dict.yaml":
+        return
+
+    temp = path.with_name(path.name + ".dedup.tmp")
+    items = []
+    best = {}
+    processing = False
+
+    with path.open("r", encoding="utf-8", newline="") as src:
+        for line in src:
+            # 词典头（含 # 注释、---、name、version、sort、...）完全原样保留。
+            if not processing:
+                items.append(("raw", line))
+                if line.strip() == "...":
+                    processing = True
+                continue
+
+            # 数据区里的注释、空行或其他非标准行也原样保留。
+            if line.startswith("#") or "\t" not in line:
+                items.append(("raw", line))
+                continue
+
+            parts = line.rstrip("\r\n").split("\t")
+            if len(parts) < 3:
+                items.append(("raw", line))
+                continue
+
+            key = (parts[0], parts[1])
+            try:
+                weight = float(parts[2])
+            except ValueError:
+                weight = -1
+
+            old = best.get(key)
+            if old is None:
+                # 去重后的词条仍放在第一次出现的位置。
+                best[key] = (line, weight)
+                items.append(("entry", key))
+            elif weight > old[1]:
+                # 仅替换内容，不改变该词条在文件中的位置。
+                best[key] = (line, weight)
+
+    with temp.open("w", encoding="utf-8", newline="") as dst:
+        for kind, value in items:
+            if kind == "raw":
+                dst.write(value)
+            else:
+                dst.write(best[value][0])
+
+    os.replace(temp, path)
+
 dict_dir = Path(sys.argv[1])
 main_dict = Path(sys.argv[2])
 renamed = {}
@@ -268,7 +406,7 @@ renamed = {}
 if dict_dir.is_dir():
     paths = [
         path for path in dict_dir.rglob("*.dict.yaml")
-        if path.name not in {"en.dict.yaml", "mixed.dict.yaml"}
+        if path.name not in {"en.dict.yaml", "mixed.dict.yaml", "abbrev.dict.yaml", "t9_abbrev.dict.yaml"}
         and not path.name.endswith(".lite.dict.yaml")
     ]
 
@@ -319,6 +457,10 @@ if dict_dir.is_dir():
 
         os.replace(temp, new_path)
         path.unlink()
+
+        if new_path.name == "zi.lite.dict.yaml":
+            dedup_zi_dict(new_path)
+
 
 
 def rewrite_imports(path):
@@ -375,7 +517,8 @@ package_schema_pro() {
       cp "$ROOT_DIR/dicts/$f" "$OUT_DIR/dicts/"
     fi
   done
-
+  # 1.2) Pro 不携带 T9 简码词库
+  rm -f "$OUT_DIR/dicts/t9_abbrev.dict.yaml"
   # 2) 复制拆分表并重命名，同时拷贝 schema
   src="$ROOT_DIR/custom/${SCHEMA_NAME}_chaifen.txt"
   dst="$OUT_DIR/lua/data/chaifen.txt"
@@ -401,6 +544,9 @@ package_schema_pro() {
     --exclude='wanxiang_pure.dict.yaml' \
     --exclude='wanxiang_pure.schema.yaml' \
     --exclude='wanxiang_pure.custom.yaml' \
+    --exclude='wanxiang_lite.custom.yaml' \
+    --exclude='wanxiang_lite.dict.yaml' \
+    --exclude='wanxiang_lite.schema.yaml' \
     --include='*.yaml' --include='*.md' --include='*.jpg' --include='*.png' \
     --exclude='*' \
     "$ROOT_DIR/custom/" "$OUT_DIR/custom/"
@@ -414,10 +560,14 @@ package_schema_pro() {
     --exclude='/docs/' \
     --exclude='/mkdocs.yml' \
     --exclude='.yamlfmt' \
+    --exclude='custom_phrase.txt' \
     --exclude='release-please-config.json' \
     --exclude='pro-*-fuzhu-dicts' \
     --exclude='wanxiang_t9.schema.yaml' \
     --exclude='wanxiang_t9i.schema.yaml' \
+    --exclude='wanxiang_abbrev_t9.dict.yaml' \
+    --exclude='wanxiang_abbrev_t9.schema.yaml' \
+    --exclude='wanxiang_phrase_t9.schema.yaml' \
     --exclude='CHANGELOG.md' \
     --exclude='wanxiang.dict.yaml' \
     --exclude='wanxiang.schema.yaml' \
@@ -457,7 +607,7 @@ package_schema_pure() {
   fi
 
   cp "${PRO_DICT_FILES[@]}" "$OUT_DIR/dicts/"
-
+  rm -f "$OUT_DIR/dicts/t9_abbrev.dict.yaml"
   # 2) custom/：保留 Pure 所需的通用配置，排除其他主方案文件
   mkdir -p "$OUT_DIR/custom"
   rsync -av --prune-empty-dirs \
@@ -468,11 +618,16 @@ package_schema_pure() {
     --exclude='wanxiang.custom.yaml' \
     --exclude='wanxiang.dict.yaml' \
     --exclude='wanxiang.schema.yaml' \
+    --exclude='wanxiang_abbrev.custom.yaml' \
+    --exclude='wanxiang_phrase.custom.yaml' \
     --exclude='wanxiang_pure.schema.yaml' \
     --exclude='wanxiang_pure.dict.yaml' \
     --exclude='wanxiang_mixedcode.custom.yaml' \
     --exclude='wanxiang_english.custom.yaml' \
     --exclude='wanxiang_reverse.custom.yaml' \
+    --exclude='wanxiang_lite.custom.yaml' \
+    --exclude='wanxiang_lite.dict.yaml' \
+    --exclude='wanxiang_lite.schema.yaml' \
     --include='*.yaml' --include='*.md' --include='*.jpg' --include='*.png' \
     --exclude='*' \
     "$CUSTOM_DIR/" "$OUT_DIR/custom/"
@@ -501,6 +656,13 @@ package_schema_pure() {
     --exclude='/wanxiang_reverse.schema.yaml' \
     --exclude='/wanxiang_t9.schema.yaml' \
     --exclude='wanxiang_t9i.schema.yaml' \
+    --exclude='wanxiang_abbrev_t9.dict.yaml' \
+    --exclude='wanxiang_abbrev_t9.schema.yaml' \
+    --exclude='wanxiang_phrase_t9.schema.yaml' \
+    --exclude='custom_phrase.dict.yaml' \
+    --exclude='wanxiang_abbrev.dict.yaml' \
+    --exclude='wanxiang_abbrev.schema.yaml' \
+    --exclude='wanxiang_phrase.schema.yaml' \
     --exclude='/CHANGELOG.md' \
     --exclude='.yamlfmt' \
     --exclude='/custom' \
@@ -511,9 +673,11 @@ package_schema_pure() {
   sed -i -E 's/^([[:space:]]*)-\s*schema:\s*wanxiang\s*$/\1- schema: wanxiang_pure/' "$OUT_DIR/default.yaml"
 }
 
-package_schema() {
+PACKAGE_DIRS=()
+
+build_schema() {
   SCHEMA_NAME="$1"
-  echo "▶️ 开始打包方案：$SCHEMA_NAME"
+  echo "▶️ 开始生成方案目录：$SCHEMA_NAME"
 
   if [[ "$SCHEMA_NAME" == "base" ]]; then
     OUT_DIR="$DIST_DIR/rime-wanxiang-base"
@@ -529,29 +693,64 @@ package_schema() {
     package_schema_pro "$SCHEMA_NAME" "$OUT_DIR"
   fi
 
-  # 所有方案统一在这里打包
-  ZIP_NAME=$(basename "$OUT_DIR").zip
-  ZIP_EXCLUDE_ARGS=()
-  for file in "${EXCLUDE_DICT_FILES[@]}"; do
-    ZIP_EXCLUDE_ARGS+=("dicts/$file")
-  done
-  (cd "$OUT_DIR" && zip -r -9 -q ../"$ZIP_NAME" . -x "${ZIP_EXCLUDE_ARGS[@]}" && cd ..)
-  echo "✅ 完成打包: $ZIP_NAME"
+  PACKAGE_DIRS+=("$OUT_DIR")
+  echo "✅ 方案目录完成: $(basename "$OUT_DIR")"
 }
 
-SCHEMA_LIST=("wx" "base" "lite" "pure" "flypy" "hanxin" "moqi" "tiger" "wubi" "zrm" "shouyou" "shyplus")
+zip_package() {
+  local out_dir="$1"
+  local zip_name
+  local file
+  local -a zip_exclude_args=()
 
-# 如果没有传入参数，则循环 package 所有的
-if [[ -z "$SCHEMA_NAME" ]]; then
-  for name in "${SCHEMA_LIST[@]}"; do
-    package_schema "$name"
+  zip_name="$(basename "$out_dir").zip"
+  for file in "${EXCLUDE_DICT_FILES[@]}"; do
+    zip_exclude_args+=("dicts/$file")
   done
-  exit 0
+
+  # CI 是干净环境，但本地重复运行时先删旧包，避免 zip 的“更新模式”留下旧文件。
+  rm -f "$DIST_DIR/$zip_name"
+  (
+    cd "$out_dir"
+    zip -r "-$ZIP_LEVEL" -q "$DIST_DIR/$zip_name" . -x "${zip_exclude_args[@]}"
+  )
+  echo "✅ 完成压缩: $zip_name"
+}
+
+zip_all_packages() {
+  local -a pids=()
+  local out_dir pid
+
+  echo "▶️ 并行压缩完整方案：ZIP_LEVEL=$ZIP_LEVEL, ZIP_JOBS=$ZIP_JOBS"
+
+  for out_dir in "${PACKAGE_DIRS[@]}"; do
+    zip_package "$out_dir" &
+    pids+=("$!")
+
+    if (( ${#pids[@]} >= ZIP_JOBS )); then
+      wait "${pids[0]}"
+      pids=("${pids[@]:1}")
+    fi
+  done
+
+  for pid in "${pids[@]}"; do
+    wait "$pid"
+  done
+}
+
+mkdir -p "$DIST_DIR"
+
+# 先只生成真正需要的 Pro 原始分包，再只编译一次 OpenCC。
+prepare_pro_dicts
+build_opencc_wanxiang
+
+# 先完成所有方案目录，最后统一并行压缩；避免原来 12 个 zip 串行占满单核。
+if [[ -z "$REQUESTED_SCHEMA" ]]; then
+  for name in "${SCHEMA_LIST[@]}"; do
+    build_schema "$name"
+  done
+else
+  build_schema "$REQUESTED_SCHEMA"
 fi
 
-if [[ ! " ${SCHEMA_LIST[*]} " =~ ${SCHEMA_NAME} ]]; then
-  echo "参数错误: 只支持 ${SCHEMA_LIST[*]}" >&2
-  exit 1
-fi
-
-package_schema "$SCHEMA_NAME"
+zip_all_packages

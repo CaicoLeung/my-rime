@@ -33969,7 +33969,7 @@ ionize	ionize	1
 ionosphere	ionosphere	14
 ionospheric	ionospheric	5
 ions	ions	415
-iOS	IOS	6
+iOS	IOS	1006
 iota	iota	49
 Iowa	Iowa	61
 IP	IP	112
@@ -71951,7 +71951,6 @@ Docker Engine	DockerEngine	5
 Dockerfile	Dockerfile	5
 Drone CI	DroneCI	5
 DynamoDB	DynamoDB	5
-Echo	Echo	5
 Elastic Stack	ElasticStack	5
 Elasticsearch	Elasticsearch	5
 Electron	Electron	5
@@ -72029,7 +72028,7 @@ Linode	Linode	5
 Lisp	Lisp	5
 LlamaIndex	LlamaIndex	5
 LLVM	LLVM	5
-Lua	Lua	5
+lua	lua	56
 Total Commander	TotalCommander	1
 Make	Make	5
 Markdown	Markdown	5

@@ -23,7 +23,7 @@
     * **wanxiang_pure.dict.yaml** —— `Pure 版词库入口`
     * **wanxiang_pure.schema.yaml** —— `Pure 版主方案文件`
 
-* **custom_phrase.txt** —— `自定义短语源文件，用于配置固定编码与置顶候选`
+* **custom_phrase.dict.yaml** —— `自定义短语源文件，用于配置固定编码与置顶候选`
 
 * **default.yaml** —— `Rime 全局默认配置，包括方案列表、快捷键及公共行为`
 
@@ -53,7 +53,7 @@
         * **chaifen.txt** —— `汉字部件拆分与反查数据`
         * **charset.reverse.bin** —— `字符集反查二进制数据库`
         * **chengyu.txt** —— `成语简码数据`
-        * **chinese_english.txt** —— `中译英释义数据`
+        * **english_chinese.txt** —— `中译英释义数据`
         * **emoji.txt** —— `Emoji 中英文映射数据`
         * **english_chinese.txt** —— `英译中释义数据`
         * **t9_abbrev.txt** —— `九宫格简拼映射数据`
@@ -96,7 +96,7 @@
         * **version_display.lua** —— `版本与项目信息显示模块`
         * **wanxiang.lua** —— `万象 Lua 公共函数与模块挂载入口`
 
-* **README.md** —— `项目主页与总体说明文档`
+* **README.html** —— `项目主页与总体说明文档`
 
 * **version.txt** —— `项目版本标识文件`
 

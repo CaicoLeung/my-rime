@@ -24,7 +24,7 @@
 
 > Pro 不是“Base 的绝对升级版”，而是不同输入哲学。
 
-相关文档：[方案介绍与版本对比](../intro.md)
+相关文档：[方案介绍与版本对比](./intro.html)
 
 ---
 
@@ -46,7 +46,7 @@ patch:
 
 总之就是仓库有的文明你不要与之重名，重名就会被覆盖这是计算机规律。
 
-相关文档：[自定义万象方案](../schema_custom.md) · [词库管理与同步](dicts_sync.md)
+相关文档：[自定义万象方案](./schema_custom.html) · [词库管理与同步](dicts_sync.html)
 
 ---
 
@@ -64,7 +64,7 @@ Rime 工作时使用的是部署后生成的编译结果，不会因为你保存
 
 如果只是改皮肤、前端候选布局，则还要注意：这些往往属于小狼毫、鼠须管、Fcitx5 等前端自己的配置，不一定由 `wanxiang.schema.yaml` 控制。
 
-相关文档：[Rime 工作机制](../Rime设计逻辑与配置哲学.md)
+相关文档：[Rime 工作机制](./Rime设计逻辑与配置哲学.html)
 
 ---
 
@@ -93,7 +93,7 @@ Rime 工作时使用的是部署后生成的编译结果，不会因为你保存
 
 不要因为“方案名能看到”就把问题直接归到词库。
 
-相关文档：[Windows](../weasel.md) · [macOS](../squirrel.md) · [Fcitx5 Linux](../fcitx5-linux.md)
+相关文档：[Windows](./weasel.html) · [macOS](./squirrel.html) · [Fcitx5 Linux](./fcitx5-linux.html)
 
 ---
 
@@ -172,7 +172,7 @@ patch:
 
 别人写文档、教程是为了体现段落层级，不要看见每一个都有patch: 就都写上。
 
-相关文档：[自定义万象方案](../schema_custom.md)
+相关文档：[自定义万象方案](./schema_custom.html)
 
 ---
 
@@ -218,7 +218,7 @@ key_binder:
 
 其次是你使用的**/+**这样的命令来修改的按键，这个表示在原来的末尾追加因此相当于有了两种翻页的按键存在。
 
-相关文档：[快捷键说明](../shortcut.md) · [自定义万象方案](../schema_custom.md)
+相关文档：[快捷键说明](./shortcut.html) · [自定义万象方案](./schema_custom.html)
 
 ---
 
@@ -277,7 +277,7 @@ wanxiang_english:
 
 只改一头，就可能出现“文件明明存在，主方案就是不用”的情况。
 
-相关文档：[词库管理与同步](../dicts_sync.md)
+相关文档：[词库管理与同步](./dicts_sync.html)
 
 ---
 
@@ -285,7 +285,7 @@ wanxiang_english:
 
 ### Q：我只是想加邮箱、地址、签名、固定短语，应该改主词库吗？
 
-**不用，优先使用 `custom_phrase.txt`。**
+**不用，优先使用 `custom_phrase.dict.yaml`。**
 
 它就是给固定内容和短编码准备的，例如：
 
@@ -304,28 +304,24 @@ example@example.com	mail	100
 
 万象默认给 `custom_phrase` 较高初始质量，本来就适合做快捷置顶短语。
 
-相关文档：[词库管理与同步](../dicts_sync.md)
+相关文档：[词库管理与同步](./dicts_sync.html)
 
 ---
 
-### Q：`custom_phrase.txt` 明明写了内容，为什么不生效？
+### Q：`custom_phrase.dict.yaml` 明明写了内容，为什么不生效？
 
 依次检查：
 
-- 文件是否真的叫 `custom_phrase.txt`，有没有被系统保存成 `custom_phrase.txt.txt`；
 - 列与列之间是不是 **Tab**；
 - 文件编码是否正常；
-- `custom_phrase/user_dict` 是否仍然指向 `custom_phrase`；
-- 是否擅自修改了 `db_class`；
+- `custom_phrase/dictionary` 是否仍然指向 `custom_phrase`；
 - 保存后有没有重新部署。
 
 万象当前默认：
 
 ```yaml
 custom_phrase:
-  dictionary: ""
-  user_dict: custom_phrase
-  db_class: stabledb
+  dictionary: custom_phrase
   enable_completion: false
   enable_sentence: false
   initial_quality: 99
@@ -339,14 +335,14 @@ custom_phrase:
 
 可以这样理解：
 
-**固定少量内容** → `custom_phrase.txt`  
+**固定少量内容** → `custom_phrase.dict.yaml`  
 **大量专业词、长期维护的数据** → 独立 `.dict.yaml` 并通过 Patch 挂载  
 **日常输入产生的动态学习** → 主翻译器用户词库  
 **我明确想记住一个新词** → 万象的自造词 / 无感造词机制
 
 不要把所有个人数据都塞进一种机制里。用途分开后，更新、同步和排错都会轻松很多。
 
-相关文档：[词库管理与同步](../dicts_sync.md) · [高阶造词](../custom_words.md)
+相关文档：[词库管理与同步](./dicts_sync.html) · [高阶造词](./custom_words.html)
 
 ---
 
@@ -363,7 +359,7 @@ custom_phrase:
 
 如果你替换的是独立挂接词库，例如英文，还要同时保证挂接方案与主方案的调用名称一致。
 
-相关文档：[词库管理与同步](../dicts_sync.md)
+相关文档：[词库管理与同步](./dicts_sync.html)
 
 ---
 
@@ -405,7 +401,7 @@ super_sequence:
 
 这样可以把“私人偏好”与“系统词库整体排序”分开管理。
 
-相关文档：[手动排序](../super_sequence.md)
+相关文档：[手动排序](./super_sequence.html)
 
 ---
 
@@ -441,15 +437,15 @@ wanxiang.userdb.txt
 
 再由其他设备导入、合并。
 
-相关文档：[词库管理与同步](../dicts_sync.md)
+相关文档：[词库管理与同步](./dicts_sync.html)
 
 ---
 
-### Q：`custom_phrase.txt` 会跟着 UserDB 自动同步吗？
+### Q：`custom_phrase.dict.yaml` 会跟着 UserDB 自动同步吗？
 
 它本质上是你自己维护的固定文本文件，不等同于输入过程中产生的 UserDB。
 
-如果你希望多设备共用同一份 `custom_phrase.txt`，可以用自己的网盘、Git 或其他文件同步方式管理；不要把“Rime 用户词同步”和“任意配置文件同步”当成一回事。你可以选择在一个地方维护变更，其他设备都只是单向下载你的更新。这与UserDB多个设备文件夹合并数据是不同的。
+如果你希望多设备共用同一份 `custom_phrase.dict.yaml`，可以用自己的网盘、Git 或其他文件同步方式管理；不要把“Rime 用户词同步”和“任意配置文件同步”当成一回事。你可以选择在一个地方维护变更，其他设备都只是单向下载你的更新。这与UserDB多个设备文件夹合并数据是不同的。
 
 ---
 
@@ -489,7 +485,7 @@ Base：拼音为主，反查 / 声调辅助
 Pro：双拼 + 专属辅助码深度参与
 ```
 
-相关文档：[辅助码系统](../aux_code.md)
+相关文档：[辅助码系统](./aux_code.html)
 
 ---
 
@@ -514,7 +510,7 @@ key: "`"
 
 如果你自行修改这个键，要同时理解 `speller/alphabet`、`recognizer`、reverse translator 和 `super_lookup` 之间的关系，不能只改一个地方就结束。
 
-相关文档：[生僻字反查](../reverse_lookup.md) · [候选辅筛](../super_lookup.md)
+相关文档：[生僻字反查](./reverse_lookup.html) · [候选辅筛](./super_lookup.html)
 
 ---
 
@@ -526,7 +522,7 @@ key: "`"
 
 这样做的目的，是让用户“知道多少打多少”，减少为了筛词反而先计算位置的负担。
 
-相关文档：[候选辅筛](../super_lookup.md)
+相关文档：[候选辅筛](./super_lookup.html)
 
 ---
 
@@ -545,7 +541,7 @@ super_comment:
 
 因此如果你只是嫌候选注释太多，优先调整 `super_comment`，不要直接拆掉整套反查组件。
 
-相关文档：[超级注释](../super_comment.md)
+相关文档：[超级注释](./super_comment.html)
 
 ---
 
@@ -559,7 +555,7 @@ super_comment:
 
 排查时先分清楚是“候选被过滤”，还是“候选已经有了但字体画不出来”。
 
-相关文档：[字符过滤](../charset.md) · [生僻字反查](../reverse_lookup.md)
+相关文档：[字符过滤](./charset.html) · [生僻字反查](./reverse_lookup.html)
 
 ---
 
@@ -630,7 +626,7 @@ smart
 spacing_timeout: 5
 ```
 
-相关文档：[中英与混合编码](../english.md)
+相关文档：[中英与混合编码](./english.html)
 
 ---
 
@@ -662,13 +658,13 @@ wanxiang_english/dictionary: wanxiang_english_user
 
 只改词典文件名，不同步修改调用关系，很容易出现“编译了一套，主方案叫的是另一套”。
 
-相关文档：[词库管理与同步](../dicts_sync.md)
+相关文档：[词库管理与同步](./dicts_sync.html)
 
 ---
 
 ### Q：`AI绘画`、型号、品牌、英文缩写这类中英混合词应该放哪里？
 
-少量固定内容可以直接放 `custom_phrase.txt`。
+少量固定内容可以直接放 `custom_phrase.dict.yaml`。
 
 如果是成体系的中文 + 英文 + 数字 + 符号混合词汇，则更适合使用万象的 `wanxiang_mixedcode` 数据体系，而不是把所有混合词都塞进普通中文用户词。
 
@@ -701,7 +697,7 @@ date_formats:
 
 时间插件还支持中文星期、英文星期、ISO 周数、时区、12 / 24 小时等占位符。
 
-相关文档：[时间日期](../shijian.md)
+相关文档：[时间日期](./shijian.html)
 
 ---
 
@@ -723,7 +719,7 @@ key_binder/shijian_keys
 
 默认可以使用 `/` 和 `o` 两种引导方式。
 
-相关文档：[时间日期](../shijian.md)
+相关文档：[时间日期](./shijian.html)
 
 ---
 
@@ -740,7 +736,7 @@ N  → 日期输入
 
 它们在 `recognizer/patterns` 中分别分发，不要把 `R` 的金额转换和 `N` 的日期模式混在一起。
 
-相关文档：[魔法字母](../RUNV.md)
+相关文档：[魔法字母](./RUNV.html)
 
 ---
 
@@ -764,7 +760,7 @@ Emoji 也使用类似规则：
 
 模糊模式可以按关键词搜索 Codex 名称，多关键词还能使用 `.` 组合。
 
-相关文档：[超级符号](../super_symbols.md)
+相关文档：[超级符号](./super_symbols.html)
 
 ---
 
@@ -794,7 +790,7 @@ paired_symbols:
 
 它不是普通标点替换，而是对当前候选进行包装。
 
-相关文档：[成对符号](../paired_symbols.md)
+相关文档：[成对符号](./paired_symbols.html)
 
 
 ---

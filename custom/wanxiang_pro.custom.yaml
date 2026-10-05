@@ -18,6 +18,14 @@ patch:
       - wanxiang_algebra:/pro/直接辅助
       #辅助码升级为：直接辅助和间接辅助两种类型，都是句中任意，不同点在于直接辅助是nire=你  而间接则需要/引导  ni/re=你 ，在这个基础上直接辅助支持拼音后任意位置数字声调参与，间接辅助声调在/引导前参与
       #- wanxiang_algebra:/自然码提权             #自然码提权、小鹤双拼提权 可选
+      - wanxiang_algebra:/26jian
+      #- wanxiang_algebra:/18jian
+      #- wanxiang_algebra:/14jian
 
   #下面是候选数量
   menu/page_size: 6
+
+  #这个文件主要用于置顶，编码为自定义编码的词汇，取消注释用自己的词库名称避免覆盖，须与wanxiang_phrase.custom.yaml一同修改
+  #custom_phrase/dictionary: wanxiang_phrase_my
+  #这个文件主要用于自定义简码词汇，取消注释用自己的词库名称避免覆盖，须与wanxiang_abbrev.custom.yaml一同修改
+  #abbrev_phrase/dictionary: wanxiang_abbrev_my
