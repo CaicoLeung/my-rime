@@ -2,9 +2,9 @@ name: Build release branch snapshot
 
 on:
   workflow_dispatch: # 手动触发
-  push:
-    branches:
-      - wanxiang
+  # push:
+  #   branches:
+  #     - wanxiang
   workflow_run:
     workflows:
       - "Sync Dicts from rime-wanxiang-data"
