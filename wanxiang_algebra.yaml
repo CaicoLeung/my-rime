@@ -2766,7 +2766,7 @@ mixed:
       - xform/(^|')ch/$1<i>/
       - xform/(^|')zh/$1<v>/
       - xform/(^|')((?:<[vu]>|[tghkljx]))[iu]a(?=$|')/$1$2<w>/
-      - xform/(^|')((?:[qtypdjlxnm](?=ing)|(?:<[iu]>|[gh])(?=uai)))(?:ing|uai)(?=$|')/$1$2<y>/
+      - xform/(^|')((?:[qtypdjlxnm](?=ing)|(?:<[iu]>|[ghk])(?=uai)))(?:ing|uai)(?=$|')/$1$2<y>/
       - xform/(^|')((?:<[viu]>|[qrtysdghjklzxcn]))[uv]an(?=$|')/$1$2<r>/
       - xform/(^|')((?:<[viu]>|[tsdghklzcn]))uo(?=$|')/$1$2<o>/
       - xform/(^|')((?:<[viu]>|[qrtysdghjklzxc]))[uv]n(?=$|')/$1$2<p>/
@@ -2805,7 +2805,7 @@ mixed:
       - xform/('|^)((?:<v>|<i>|<u>|[tsdghklzcn]))uo(?=^|$|')/$1$2<o>/
       - xform/('|^)([qtpdjlxbnm])ie(?=^|$|')/$1$2<p>/
       - xform/('|^)((?:<v>|<i>|[qrtysdghjklzxcn]))i?ong(?=^|$|')/$1$2<s>/
-      - xform/('|^)((?:[qtypdjlxnm](?=ing)|(?:<i>|<u>|[gh])(?=uai)))(?:ing|uai)(?=^|$|')/$1$2<k>/
+      - xform/('|^)((?:[qtypdjlxnm](?=ing)|(?:<i>|<u>|[ghk])(?=uai)))(?:ing|uai)(?=^|$|')/$1$2<k>/
       - xform/('|^)((?:<i>|<u>|[aoewtpsdghklzcbnm]))ai(?=^|$|')/$1$2<d>/
       - xform/('|^)((?:<v>|<i>|<u>|[wrtpsdfghkzcbnm]))en(?=^|$|')/$1$2<f>/
       - xform/('|^)((?:<v>|<i>|<u>|[wrtpsdfghklzcbnm]))eng(?=^|$|')/$1$2<g>/
@@ -2834,7 +2834,7 @@ mixed:
       - xform/('|^)sh/$1<u>/
       - xform/('|^)ch/$1<i>/
       - xform/('|^)zh/$1<v>/
-      - xform/('|^)((?:[yjlx](?=v)|(?:<i>|<u>|[gh])(?=uai)))(?:v|uai)(?=^|$|')/$1$2<y>/
+      - xform/('|^)((?:[yjlx](?=v)|(?:<i>|<u>|[ghk])(?=uai)))(?:v|uai)(?=^|$|')/$1$2<y>/
       - xform/('|^)((?:(?=er)|(?:<v>|<i>|<u>|[qrtysdghjklzxcn])(?=[uv]an)))(?:er|[uv]an)(?=^|$|')/$1$2<r>/
       - xform/('|^)((?:<v>|<i>|<u>|[tsdghklzcn]))uo(?=^|$|')/$1$2<o>/
       - xform/('|^)((?:<v>|<i>|<u>|[qrtysdghjklzxc]))[uv]n(?=^|$|')/$1$2<p>/
@@ -2871,7 +2871,7 @@ mixed:
       - xform/('|^)sh/$1<u>/
       - xform/('|^)ch/$1<i>/
       - xform/('|^)zh/$1<v>/
-      - xform/('|^)((?:[yjlx](?=v)|(?:<i>|<u>|[gh])(?=uai)))(?:v|uai)(?=^|$|')/$1$2<y>/
+      - xform/('|^)((?:[yjlx](?=v)|(?:<i>|<u>|[ghk])(?=uai)))(?:v|uai)(?=^|$|')/$1$2<y>/
       - xform/('|^)((?:<v>|<i>|<u>|[qrtysdghjklzxcn]))[uv]an(?=^|$|')/$1$2<r>/
       - xform/('|^)((?:<v>|<i>|<u>|[tsdghklzcn]))uo(?=^|$|')/$1$2<o>/
       - xform/('|^)((?:<v>|<i>|<u>|[qrtysdghjklzxc]))[uv]n(?=^|$|')/$1$2<p>/
@@ -2916,7 +2916,7 @@ mixed:
       - xform/('|^)((?:<v>|<i>|<u>|[wrtypsdfghklzcbnm]))an(?=^|$|')/$1$2<j>/
       - xform/('|^)([qtpdjlxbnm])iao(?=^|$|')/$1$2<z>/
       - xform/('|^)((?:<v>|<i>|<u>|[rtypsdghklzcbnm]))ao(?=^|$|')/$1$2<k>/
-      - xform/('|^)((?:[qypjlmnbx](?=in)|(?:<i>|<u>|[gh])(?=uai)))(?:in|uai)(?=^|$|')/$1$2<c>/
+      - xform/('|^)((?:[qypjlmnbx](?=in)|(?:<i>|<u>|[ghk])(?=uai)))(?:in|uai)(?=^|$|')/$1$2<c>/
       - xform/('|^)((?:<i>|<u>|[aoewtpsdghklzcbnm]))ai(?=^|$|')/$1$2<l>/
       - xform/('|^)([qtpdjlxbnm])ie(?=^|$|')/$1$2<x>/
       - xform/('|^)((?:<v>|<i>|<u>|[rtypsdfghklzm]))ou(?=^|$|')/$1$2<b>/
@@ -2934,7 +2934,7 @@ mixed:
       - xform/('|^)sh/$1<i>/
       - xform/('|^)((?:<v>|<i>|<u>|[wrtpsdfghkzcbnm]))en(?=^|$|')/$1$2<w>/
       - xform/('|^)((?:<v>|<i>|<u>|[wrtpsdfghklzcbnm]))eng(?=^|$|')/$1$2<t>/
-      - xform/('|^)((?:[qypjlmnbx](?=in)|(?:<i>|<u>|[gh])(?=uai)))(?:in|uai)(?=^|$|')/$1$2<y>/
+      - xform/('|^)((?:[qypjlmnbx](?=in)|(?:<i>|<u>|[ghk])(?=uai)))(?:in|uai)(?=^|$|')/$1$2<y>/
       - xform/('|^)((?:<v>|<i>|<u>|[tsdghklzcn]))uo(?=^|$|')/$1$2<o>/
       - xform/('|^)((?:<i>|<u>|[aoewtpsdghklzcbnm]))ai(?=^|$|')/$1$2<p>/
       - xform/('|^)ch/$1<a>/
@@ -2969,7 +2969,7 @@ mixed:
       - xform/('|^)ch/$1<u>/
       - xform/('|^)zh/$1<v>/
       - xform/('|^)((?:<v>|<i>|<u>|[qrtysdghjklzxcn]))[uv]an(?=^|$|')/$1$2<c>/
-      - xform/('|^)((?:(?:<i>|<u>|[gh])(?=uai)|[qyjlxn](?=[uv]e)))(?:uai|[uv]e)(?=^|$|')/$1$2<x>/
+      - xform/('|^)((?:(?:<i>|<u>|[ghk])(?=uai)|[qyjlxn](?=[uv]e)))(?:uai|[uv]e)(?=^|$|')/$1$2<x>/
       - xform/('|^)((?:[qtypdjlxnm](?=ing)|(?=er)))(?:ing|er)(?=^|$|')/$1$2<q>/
       - xform/('|^)((?:<v>|<i>|<u>|[tsdghklzcn]))uo(?=^|$|')/$1$2<o>/
       - xform/('|^)((?:<v>|<i>|<u>|[qrtysdghjklzxc]))[uv]n(?=^|$|')/$1$2<z>/
@@ -3009,7 +3009,7 @@ mixed:
       - xform/('|^)((?:<v>|<i>|<u>|[tsdghklzcn]))uo(?=^|$|')/$1$2<o>/
       - xform/('|^)([qtpdjlxbnm])ie(?=^|$|')/$1$2<t>/
       - xform/('|^)((?:<v>|<i>|[qrtysdghjklzxcn]))i?ong(?=^|$|')/$1$2<s>/
-      - xform/('|^)((?:[qtypdjlxnm](?=ing)|(?:<i>|<u>|[gh])(?=uai)))(?:ing|uai)(?=^|$|')/$1$2<j>/
+      - xform/('|^)((?:[qtypdjlxnm](?=ing)|(?:<i>|<u>|[ghk])(?=uai)))(?:ing|uai)(?=^|$|')/$1$2<j>/
       - xform/('|^)((?:<i>|<u>|[aoewtpsdghklzcbnm]))ai(?=^|$|')/$1$2<k>/
       - xform/('|^)((?:<v>|<i>|<u>|[wrtpsdfghkzcbnm]))en(?=^|$|')/$1$2<r>/
       - xform/('|^)((?:<v>|<i>|<u>|[wrtpsdfghklzcbnm]))eng(?=^|$|')/$1$2<h>/
@@ -3041,7 +3041,7 @@ mixed:
       - xform/('|^)sh/$1<e>/
       - xform/('|^)ch/$1<i>/
       - xform/('|^)zh/$1<v>/
-      - xform/('|^)((?:[qtypdjlxnm](?=ing)|(?:<i>|<u>|[gh])(?=uai)))(?:ing|uai)(?=^|$|')/$1$2<g>/
+      - xform/('|^)((?:[qtypdjlxnm](?=ing)|(?:<i>|<u>|[ghk])(?=uai)))(?:ing|uai)(?=^|$|')/$1$2<g>/
       - xform/('|^)((?:<v>|<i>|<u>|[qrtysdghjklzxcn]))[uv]an(?=^|$|')/$1$2<t>/
       - xform/('|^)((?:<v>|<i>|<u>|[tsdghklzcn]))uo(?=^|$|')/$1$2<o>/
       - xform/('|^)((?:<v>|<i>|<u>|[qrtysdghjklzxc]))[uv]n(?=^|$|')/$1$2<z>/
