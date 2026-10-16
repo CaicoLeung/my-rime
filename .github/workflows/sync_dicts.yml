@@ -1,4 +1,4 @@
-name: Sync Dicts from RIME-LMDG
+name: Sync Dicts from rime-wanxiang-data
 
 on:
   schedule:
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout source repo
         uses: actions/checkout@v7
         with:
-          repository: amzxyz/RIME-LMDG
+          repository: amzxyz/rime-wanxiang-data
           ref: wanxiang
           path: source
           fetch-depth: 1
