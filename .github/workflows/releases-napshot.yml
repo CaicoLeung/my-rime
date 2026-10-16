@@ -5,7 +5,13 @@ on:
   push:
     branches:
       - wanxiang
-
+  workflow_run:
+    workflows:
+      - "Sync Dicts from rime-wanxiang-data"
+    types:
+      - completed
+    branches:
+      - wanxiang
 concurrency:
   group: release-branch
   cancel-in-progress: true
