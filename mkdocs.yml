@@ -67,7 +67,7 @@ nav:
 
   - 快速上手:
       - 方案介绍与版本对比: doc/intro.md
-
+      - 手动设置: doc/manual.md
       - Windows:
           - Weasel 小狼毫: doc/weasel.md
 
@@ -90,10 +90,8 @@ nav:
       - HarmonyOS NEXT:
           - 超越输入法: doc/chaoyue.md
 
-      - 进阶安装:
-          - 万象工具链: doc/tools.md
-          - 东风破 Plum: doc/plum.md
-          - 手动设置: doc/manual.md
+      - 万象工具链: doc/tools.md
+      - 东风破 Plum: doc/plum.md
 
   - 常见问题: doc/faq.md
 
@@ -137,13 +135,16 @@ nav:
       - Rime 配置手册: doc/RIME配置手册.md
       - Rime 配置指南: doc/RIME配置指南.md
       - 按键映射列表: doc/key.md
+      - 汉语拼音对照表: doc/complete_pinyin_table.md
+
+  - 万象双拼: doc/wxsp.md
 
   - 项目动态:
       - 2026 年中词库报告: doc/2026-1.md
       - 2026 年中模型更新: doc/400+gram.md
       - 万象用户词体系重构纪实: doc/custom_phrase_architecture.md
 
-copyright: Copyright &copy; 2024-2026 万象拼音 · 开源项目文档  Q群：11033572 / 11631066
+copyright: Copyright &copy; 2024-2026 万象拼音 · 开源项目文档  Q群：11033572 / 11631066  TG：https://t.me/wanxiangpinyin
 
 extra:
   generator: false

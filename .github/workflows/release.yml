@@ -2,7 +2,13 @@ on:
   push:
     branches:
       - wanxiang
-
+  workflow_run:
+    workflows:
+      - "Sync Dicts from rime-wanxiang-data"
+    types:
+      - completed
+    branches:
+      - wanxiang
 permissions:
   contents: write
   pull-requests: write
